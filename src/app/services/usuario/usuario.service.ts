@@ -5,6 +5,7 @@ import { URL_SERVICIOS } from 'src/app/config/config';
 import { map } from "rxjs/operators";
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
+import { SubirArchivoService } from '../subir-archivo/subir-archivo.service';
 
 @Injectable({
   providedIn: 'root'
@@ -14,7 +15,7 @@ export class UsuarioService {
   usuario: Usuario;
   token: string;
 
-  constructor(private _http: HttpClient, public router: Router) {
+  constructor(private _http: HttpClient, public router: Router, public subirArchivoService: SubirArchivoService) {
     this.cargarStorage();
   }
 
@@ -78,9 +79,6 @@ export class UsuarioService {
       .pipe(
         map((resp: any) => {
           this.guadarStorage(resp.usuario._id, resp.token, resp.usuario);
-          // localStorage.setItem('id', resp.usuario._id);
-          // localStorage.setItem('token', resp.token);
-          // localStorage.setItem('usuario', JSON.stringify(resp.usuario));
           return resp;
         })
       );
@@ -98,10 +96,52 @@ export class UsuarioService {
             icon: 'success',
             title: `Usuario ${usuario.email} creado`,
             text: 'Sera redirigido al login para iniciar sesión',
-          })
+          });
           return resp.usaurio;
         })
       );
+
+  }
+
+  actualizarUsuario(usuario: Usuario){
+
+    let url = URL_SERVICIOS + '/usuario/' + usuario._id;
+    url += '?token=' + this.token;
+
+    return this._http.put(url, usuario)
+          .pipe(
+            map((resp: any) => {
+
+              let user: Usuario = resp.body;
+              
+              this.guadarStorage(user._id, this.token, user);
+
+              Swal.fire({
+                icon: 'success',
+                title: `Usuario ${user.nombre} actualizado`,
+                text: 'Usuario actualizado correctamente',
+              })
+              return resp;
+            })
+          );
+
+  }
+
+  cambiarImagen(file: File, id: string){
+  
+    this.subirArchivoService.subirArchivo(file, 'usuarios', id)
+        .then( (resp: any) => {
+          this.usuario.img = resp.usuario.img;
+          Swal.fire({
+            icon: 'success',
+            title: `Imagen actualizada`,
+            text: 'Sera ha actualizado la imagen correctamente'
+          });
+          this.guadarStorage(id, this.token, this.usuario);
+        })
+        .catch( (resp: any) => {
+          console.log(resp);
+        });
 
   }
 
