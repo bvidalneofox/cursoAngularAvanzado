@@ -145,4 +145,38 @@ export class UsuarioService {
 
   }
 
+  cargarUsuarios(desde: number = 0){
+
+    let url = `${URL_SERVICIOS}/usuario?desde=${desde}`;
+
+    return this._http.get(url);
+
+  }
+
+  buscarUsuarios(termino: string){
+
+    let url = `${URL_SERVICIOS}/busqueda/coleccion/usuarios/${termino}`;
+
+    return this._http.get(url)
+      .pipe(
+        map((resp: any) => {
+          return resp.usuarios;
+        })
+      );
+
+  }
+
+  borrarUsuario(id:string){
+    let url = `${URL_SERVICIOS}/usuario/${id}`;
+    url += '?token=' + this.token;
+
+    return this._http.delete(url)
+      .pipe(
+        map(resp => {
+          Swal.fire('Usuario Eliminado','Se ha eliminado correctamente','success');
+          return resp;
+        })
+      );
+  }
+
 }
