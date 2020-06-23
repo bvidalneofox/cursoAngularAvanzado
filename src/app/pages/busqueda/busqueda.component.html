@@ -1,0 +1,98 @@
+<div class="row">
+    <div class="col-4">
+        <div class="card">
+            <div class="card-body">
+                
+                <h4 class="card-title">Usuarios</h4>
+
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Foto</th>
+                            <th>Nombre</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let itemUsuario of usuarios">
+                            <td>
+                                <img [src]="itemUsuario.img | imagen" class="img-circle img-fluid" style="width: 50px;">
+                            </td>
+                            <td>{{itemUsuario.nombre}}</td>
+                            <td>
+                                <button class="btn btn-primary">
+                                    <i class="fa fa-edit"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+    <div class="col-4">
+        <div class="card">
+            <div class="card-body">
+                
+                <h4 class="card-title">Medicos</h4>
+
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Foto</th>
+                            <th>Nombre</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let itemMedico of medicos">
+                            <td>
+                                <img [src]="itemMedico.img | imagen:'medico'" class="img-circle img-fluid" style="width: 50px;">
+                            </td>
+                            <td>{{itemMedico.nombre}}</td>
+                            <td>
+                                <button class="btn btn-primary">
+                                    <i class="fa fa-edit"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+    <div class="col-4">
+        <div class="card">
+            <div class="card-body">
+                
+                <h4 class="card-title">Hospitales</h4>
+
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th>Foto</th>
+                            <th>Nombre</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let itemHospital of hospitales">
+                            <td>
+                                <img [src]="itemHospital.img | imagen:'hospital'" class="img-circle img-fluid" style="width: 50px;">
+                            </td>
+                            <td>{{itemHospital.nombre}}</td>
+                            <td>
+                                <button class="btn btn-primary">
+                                    <i class="fa fa-edit"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+            </div>
+        </div>
+    </div>
+</div>

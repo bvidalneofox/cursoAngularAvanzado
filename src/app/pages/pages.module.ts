@@ -17,6 +17,10 @@ import { ProfileComponent } from './profile/profile.component';
 import { CommonModule } from '@angular/common';
 import { UsuariosComponent } from './usuarios/usuarios.component';
 import { ModalUploadComponent } from '../components/modal-upload/modal-upload.component';
+import { HospitalesComponent } from './hospitales/hospitales.component';
+import { MedicosComponent } from './medicos/medicos.component';
+import { MedicoComponent } from './medicos/medico.component';
+import { BusquedaComponent } from './busqueda/busqueda.component';
 
 @NgModule({
     imports: [
@@ -45,7 +49,11 @@ import { ModalUploadComponent } from '../components/modal-upload/modal-upload.co
         PromesasComponent,
         RxjsComponent,
         ProfileComponent,
-        UsuariosComponent
+        UsuariosComponent,
+        HospitalesComponent,
+        MedicosComponent,
+        MedicoComponent,
+        BusquedaComponent
     ],
     providers: [],
 })

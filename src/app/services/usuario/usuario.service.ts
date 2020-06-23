@@ -2,10 +2,11 @@ import { Injectable } from '@angular/core';
 import { Usuario } from 'src/app/models/usuario.model';
 import { HttpClient } from '@angular/common/http';
 import { URL_SERVICIOS } from 'src/app/config/config';
-import { map } from "rxjs/operators";
+import { map, catchError } from "rxjs/operators";
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
 import { SubirArchivoService } from '../subir-archivo/subir-archivo.service';
+import { Observable } from 'rxjs';
 
 @Injectable({
   providedIn: 'root'
@@ -14,6 +15,7 @@ export class UsuarioService {
 
   usuario: Usuario;
   token: string;
+  menu: any = [];
 
   constructor(private _http: HttpClient, public router: Router, public subirArchivoService: SubirArchivoService) {
     this.cargarStorage();
@@ -27,27 +29,33 @@ export class UsuarioService {
     if(localStorage.getItem('token')){
       this.token = localStorage.getItem('token');
       this.usuario = JSON.parse(localStorage.getItem('usuario'));
+      this.menu = JSON.parse(localStorage.getItem('menu'));
     }else{
       this.token = '';
       this.usuario = null;
+      this.menu = [];
     }
   }
 
-  guadarStorage(id: string, token: string, usuario: Usuario) {
+  guadarStorage(id: string, token: string, usuario: Usuario, menu: any) {
     localStorage.setItem('id', id);
     localStorage.setItem('token', token);
     localStorage.setItem('usuario', JSON.stringify(usuario));
+    localStorage.setItem('menu', JSON.stringify(menu));
 
     this.usuario = usuario;
     this.token = token;
+    this.menu = menu;
   }
 
   logout(){
     this.usuario = null;
     this.token = '';
+    this.menu = [];
 
     localStorage.removeItem('token');
     localStorage.removeItem('usuario');
+    localStorage.removeItem('menu');
 
     this.router.navigate(['/login']);
   }
@@ -59,7 +67,7 @@ export class UsuarioService {
     return this._http.post(url, { token })
     .pipe(
       map((resp: any) => {
-        this.guadarStorage(resp.usuario._id, resp.token, resp.usuario);
+        this.guadarStorage(resp.usuario._id, resp.token, resp.usuario, resp.menu);
         return resp;
       })
     );
@@ -78,8 +86,13 @@ export class UsuarioService {
     return this._http.post(url, usuario)
       .pipe(
         map((resp: any) => {
-          this.guadarStorage(resp.usuario._id, resp.token, resp.usuario);
+          this.guadarStorage(resp.usuario._id, resp.token, resp.usuario, resp.menu);
           return resp;
+        }),
+        catchError(err => {
+          console.log(err.error.mensaje);
+          Swal.fire('Error', err.error.mensaje, 'error');
+          return Observable.throw(err);
         })
       );
 
@@ -114,7 +127,7 @@ export class UsuarioService {
 
               let user: Usuario = resp.body;
               
-              this.guadarStorage(user._id, this.token, user);
+              this.guadarStorage(user._id, this.token, user, this.menu);
 
               Swal.fire({
                 icon: 'success',
@@ -137,7 +150,7 @@ export class UsuarioService {
             title: `Imagen actualizada`,
             text: 'Sera ha actualizado la imagen correctamente'
           });
-          this.guadarStorage(id, this.token, this.usuario);
+          this.guadarStorage(id, this.token, this.usuario, this.menu);
         })
         .catch( (resp: any) => {
           console.log(resp);
