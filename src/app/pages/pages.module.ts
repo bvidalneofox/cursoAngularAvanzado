@@ -32,17 +32,17 @@ import { BusquedaComponent } from './busqueda/busqueda.component';
         PipesModule
     ],
     exports: [
-        PagesComponent,
+        // PagesComponent,
         DashboardComponent,
         ProgressComponent,
         Graficas1Component
     ],
     declarations: [
-        PagesComponent,
+        // PagesComponent,
         DashboardComponent,
         ProgressComponent,
         Graficas1Component,
-        ModalUploadComponent,
+        // ModalUploadComponent,
         IncrementadorComponent,
         GraficoDonaComponent,
         AccountSettingsComponent,
